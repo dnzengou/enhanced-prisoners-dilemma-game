@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle of Sexes Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        #game-container {
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        #scores {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Battle of Sexes Game</h1>
+    <p>Choose between Prize Fight and Ballet. Try to coordinate with your partner!</p>
+    <div id="game-container">
+        <label for="games">Number of games to play:</label>
+        <input type="number" id="games" min="1" value="5">
+        <br><br>
+        <button id="prize-fight">Prize Fight</button>
+        <button id="ballet">Ballet</button>
+        <div id="result"></div>
+        <div id="scores">
+            <p>Your score: <span id="your-score">0</span></p>
+            <p>Partner's score: <span id="partner-score">0</span></p>
+        </div>
+    </div>
+
+    <script>
+        const prizeFightBtn = document.getElementById('prize-fight');
+        const balletBtn = document.getElementById('ballet');
+        const result = document.getElementById('result');
+        const yourScore = document.getElementById('your-score');
+        const partnerScore = document.getElementById('partner-score');
+        const gamesInput = document.getElementById('games');
+
+        let yourDecision = 0;
+        let partnerDecision = 0;
+        let gamesLeft = 5;
+
+        function updateScores() {
+            yourScore.textContent = yourDecision;
+            partnerScore.textContent = partnerDecision;
+        }
+
+        function playGame(userChoice) {
+            if (gamesLeft <= 0) {
+                result.textContent = "Game over! Check the final scores.";
+                return;
+            }
+
+            const possibleActions = ["prize fight", "ballet"];
+            const partnerChoice = possibleActions[Math.floor(Math.random() * possibleActions.length)];
+
+            let resultText = `You chose ${userChoice}, partner chose ${partnerChoice}. `;
+
+            if (userChoice === partnerChoice) {
+                if (userChoice === "prize fight") {
+                    resultText += "You both decided to go to Prize Fight.";
+                    yourDecision += 10;
+                    partnerDecision += 7;
+                } else {
+                    resultText += "You both decided to go to Ballet.";
+                    yourDecision += 7;
+                    partnerDecision += 10;
+                }
+            } else {
+                resultText += "You both didn't satisfy.";
+            }
+
+            result.textContent = resultText;
+            updateScores();
+            gamesLeft--;
+
+            if (gamesLeft === 0) {
+                result.textContent += " Game over! Check the final scores.";
+            }
+        }
+
+        prizeFightBtn.addEventListener('click', () => playGame("prize fight"));
+        balletBtn.addEventListener('click', () => playGame("ballet"));
+
+        gamesInput.addEventListener('change', () => {
+            gamesLeft = parseInt(gamesInput.value);
+            yourDecision = 0;
+            partnerDecision = 0;
+            updateScores();
+            result.textContent = "";
+        });
+    </script>
+</body>
+</html>
